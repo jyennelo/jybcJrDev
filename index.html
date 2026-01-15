@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- DARK MODE BUTTON -->
 <div class="dark-mode-switch" id="darkModeSwitch">
   <div class="switch-track">
     <div class="switch-thumb"></div>
@@ -44,6 +43,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Added for scrolling on small devices */
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 main {
@@ -71,8 +73,8 @@ body.light-mode {
 
 /* COMMON STYLES */
 * { box-sizing: border-box; margin:0; padding:0; }
-html, body { height:100%; }
-main { width:100%; max-width:720px; padding:3rem 1.5rem; }
+html, body { min-height:100%; }
+main { width:100%; max-width:720px; padding:5rem 1.5rem; }
 h1 { font-size:clamp(2.2rem,6vw,3rem); font-weight:600; line-height:1.1; margin-bottom:1rem; }
 h1 span { color: var(--accent); }
 p.lead { font-size:1.05rem; color: var(--muted); max-width:520px; margin-bottom:2.5rem; }
@@ -94,6 +96,7 @@ section { margin-bottom:2.2rem; }
     background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); 
     transition: border 0.2s ease, transform 0.2s ease; 
     max-width: 520px;
+    width: 100%;
   }
 
 .card:hover 
@@ -111,12 +114,12 @@ section { margin-bottom:2.2rem; }
     font-size:0.8rem; color: var(--muted); 
   }
 
-footer { margin-top:3rem; display:flex; gap:1.2rem; flex-wrap:wrap; font-size:0.85rem; }
+footer { margin-top:3rem; display:flex; gap:1.2rem; flex-wrap:wrap; font-size:0.85rem; align-items: center; justify-content: space-between; }
 footer a { color: var(--fg); text-decoration:none; border-bottom:1px solid transparent; }
 footer a:hover { border-color: var(--accent); color: var(--accent); }
 
 /* cursor glow */
-.glow { position: fixed; width: 300px; height: 300px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(3, 245, 225, 0.158), transparent 100%); transform: translate(-50%, -50%); filter: blur(10px); }
+.glow { position: fixed; width: 300px; height: 300px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(3, 245, 225, 0.158), transparent 100%); transform: translate(-50%, -50%); filter: blur(10px); z-index: -1; }
 
 /* ================================
    FUTURISTIC FORM
@@ -199,6 +202,7 @@ footer a:hover { border-color: var(--accent); color: var(--accent); }
   pointer-events: none;
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 1001;
 }
 .confirmation-bubble.show { opacity: 1; transform: translateY(0); }
 
@@ -219,6 +223,7 @@ footer a:hover { border-color: var(--accent); color: var(--accent); }
   pointer-events: none;
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 1001;
 }
 .error-bubble.show { opacity: 1; transform: translateY(0); }
 
@@ -226,15 +231,15 @@ footer a:hover { border-color: var(--accent); color: var(--accent); }
    DARK MODE TOGGLE SWITCH
 =============================== */
 .dark-mode-switch {
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
+  position: absolute;    /* This keeps it locked to the viewport */
+  top: 20px;         /* Distance from the top */
+  right: 20px;       /* Distance from the right */
   width: 50px;
   height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;     /* A high number ensures it stays on top of all other content */
 }
 
 .switch-track {
@@ -297,7 +302,48 @@ body.light-mode .dark-mode-switch::before {
 
 .right-footer {
     position: relative;
-    left: 150px;
+    /* Removed the hard left: 150px to make it responsive */
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+  body {
+    align-items: flex-start;
+  }
+  main {
+    padding: 4rem 1.2rem;
+  }
+  footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .dark-mode-switch {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+/* ADD THIS AT THE BOTTOM OF YOUR CSS */
+@media (min-width: 600px) and (max-width: 1024px) {
+  main {
+    max-width: 90%;      /* Gives more breathing room on iPad */
+    padding: 6rem 3rem;  /* Increases side padding */
+  }
+
+  h1 {
+    font-size: 3.5rem;   /* Larger heading for tablet screens */
+  }
+
+  .projects {
+    grid-template-columns: repeat(2, 1fr); /* Forces 2 columns on iPads */
+    gap: 1.5rem;
+  }
+
+  .lead {
+    font-size: 1.2rem;   /* Improves readability of the intro text */
+    max-width: 80%;
+  }
 }
 
 </style>
@@ -310,7 +356,7 @@ body.light-mode .dark-mode-switch::before {
 
     <h2>Hello, I'm</h2>
     <h1>John Yennelo Cablas</h1>
-    <h3 style="font-style: italic;">Jr. Web Developer</h3>
+    <h3 style="font-style: italic; margin-bottom: 1rem;">Jr. Web Developer</h3>
 
 <p class="lead">I build compact, fast, and modern web interfaces. Focused on clarity, performance, and clean UX. Open for freelance & remote work.</p>
 
@@ -373,7 +419,10 @@ body.light-mode .dark-mode-switch::before {
 <script>
 // Cursor glow follow
 const glow = document.getElementById('glow');
-window.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+window.addEventListener('mousemove', e => { 
+    glow.style.left = e.clientX + 'px'; 
+    glow.style.top = e.clientY + 'px'; 
+});
 
 // Dark mode toggle switch logic
 const darkSwitch = document.getElementById("darkModeSwitch");
@@ -405,7 +454,7 @@ form.addEventListener("submit", async (e) => {
   } else {
     ebubble.classList.add("show");
     form.reset();
-    setTimeout(() => bubble.classList.remove("show"), 500);
+    setTimeout(() => ebubble.classList.remove("show"), 5000);
   }
 
   setTimeout(() => rocketBtn.classList.remove("rocket-launch"), 600);
