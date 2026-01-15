@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- DARK MODE BUTTON -->
+<div class="dark-mode-switch" id="darkModeSwitch">
+  <div class="switch-track">
+    <div class="switch-thumb"></div>
+  </div>
+</div>
+
+
+<title>JYBC</title>
+
+<style>
+:root {
+  --bg: #0a0a0a;
+  --fg: #eaeaea;
+  --muted: #9a9a9a;
+  --accent: #5eead4;
+}
+
+:root {
+  /* Dark mode toggle button colors */
+  --toggle-track-dark: #1e1e1e;   /* track background in dark mode */
+  --toggle-thumb-dark: #5eead4;   /* thumb color in dark mode */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body { height: 100%; }
+
+body {
+  background: radial-gradient(1200px 600px at 10% 10%, #111 0%, var(--bg) 60%);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+main {
+  width: 100%;
+  max-width: 720px;
+  padding: 3rem 1.5rem;
+}
+
+/* LIGHT MODE VARIABLES */
+body.light-mode {
+  --bg: #fefefe;           /* Page background */
+  --fg: #111;               /* Text color */
+  --muted: #555;            /* Muted text */
+  
+  --card-bg: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0)); /* Card background */
+  --input-border: #ccc;     /* Input / textarea border */
+  --btn-color: #1a73e8;     /* Buttons / interactive highlights */
+
+  /* Keep accent same for highlights */
+  --accent: #5eb2ea;
+
+  background: radial-gradient(1200px 600px at 10% 10%, #fff 0%, var(--bg) 80%);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* COMMON STYLES */
+* { box-sizing: border-box; margin:0; padding:0; }
+html, body { height:100%; }
+main { width:100%; max-width:720px; padding:3rem 1.5rem; }
+h1 { font-size:clamp(2.2rem,6vw,3rem); font-weight:600; line-height:1.1; margin-bottom:1rem; }
+h1 span { color: var(--accent); }
+p.lead { font-size:1.05rem; color: var(--muted); max-width:520px; margin-bottom:2.5rem; }
+section { margin-bottom:2.2rem; }
+.label { font-size:0.7rem; letter-spacing:3px; color:var(--muted); margin-bottom:0.6rem; }
+
+.stack { display:flex; flex-wrap:wrap; gap:0.3rem; }
+.chip { border:1px solid #222; padding:0.45rem 0.7rem; border-radius:999px; font-size:0.75rem; color: var(--fg); background: rgba(255,255,255,0.02); }
+
+.projects 
+  { 
+    display:grid; gap: 1rem; 
+  }
+
+.card 
+  { 
+    border:5px solid #1e1e1e; border-radius:20px; 
+    padding:1rem 1.1rem; 
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); 
+    transition: border 0.2s ease, transform 0.2s ease; 
+    max-width: 520px;
+  }
+
+.card:hover 
+  { 
+    border-color: var(--accent); transform:translateY(-2px); 
+  }
+
+.card h3 
+  { 
+    font-size:0.95rem; font-weight:500; margin-bottom:0.35rem; 
+  }
+
+.card p 
+  { 
+    font-size:0.8rem; color: var(--muted); 
+  }
+
+footer { margin-top:3rem; display:flex; gap:1.2rem; flex-wrap:wrap; font-size:0.85rem; }
+footer a { color: var(--fg); text-decoration:none; border-bottom:1px solid transparent; }
+footer a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* cursor glow */
+.glow { position: fixed; width: 300px; height: 300px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(3, 245, 225, 0.158), transparent 100%); transform: translate(-50%, -50%); filter: blur(10px); }
+
+/* ================================
+   FUTURISTIC FORM
+   ================================ */
+.message-box {
+  border: 1px solid #1e1e1e;
+  border-radius: 18px;
+  padding: 1.2rem 1.3rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.message-box input,
+.message-box textarea {
+  width: 100%;
+  background: transparent;
+  border: 3px solid #222;
+  border-radius: 20px;
+  padding: 0.65rem 0.8rem;
+  color: var(--fg);
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  outline: none;
+}
+
+.message-box input::placeholder,
+.message-box textarea::placeholder { color: var(--muted); }
+
+.message-box input:focus,
+.message-box textarea:focus { border-color: var(--accent); box-shadow: 0 0 px rgba(94,234,212,0.25); }
+
+.message-actions { display: flex; justify-content: flex-end; margin-top: 0.6rem; }
+
+.rocket-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  border: 1px solid #1e1e1e;
+  color: var(--fg);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.rocket-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.rocket-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.rocket-btn:hover svg { transform: translate(10px, -5px); }
+
+/* rocket launch animation on submit */
+.rocket-launch svg { animation: rocket-launch 0.6s ease forwards; }
+@keyframes rocket-launch { 0% { transform: translate(0,0); } 50% { transform: translate(0,-10px); } 100% { transform: translate(0,-50px); opacity:0; } }
+
+/* ================================
+   CONFIRMATION BUBBLE
+   ================================ */
+.confirmation-bubble {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent);
+  color: #000;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.confirmation-bubble.show { opacity: 1; transform: translateY(0); }
+
+/* ================================
+   ERROR TO CONFIRM BUBBLE
+   ================================ */
+.error-bubble {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent);
+  color: #000;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.error-bubble.show { opacity: 1; transform: translateY(0); }
+
+/* ===============================
+   DARK MODE TOGGLE SWITCH
+=============================== */
+.dark-mode-switch {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 50px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+.switch-track {
+  width: 100%;
+  height: 100%;
+  background: #1e1e1e;
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+body.light-mode .switch-track {
+  background: var(--accent);
+}
+
+.switch-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--fg);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+body.light-mode .switch-thumb {
+  transform: translateX(22px);
+  background: #000;
+}
+
+/* Add this at the end of your CSS */
+.dark-mode-switch::before {
+  content: '';
+  position: absolute;
+  inset: -6px; /* distance around the toggle */
+  border-radius: 999px;
+  background: rgba(94,234,212,0.3);
+  filter: blur(6px);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  animation: pulse 2s infinite;
+  pointer-events: none;
+  z-index: -1; /* behind the toggle */
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1.3; }
+}
+
+/* Optional: dim the glow when light mode is active */
+body.light-mode .dark-mode-switch::before {
+  background: rgba(94,178,234,0.3);
+}
+
+.left-footer a {
+    padding: 5px;
+}
+
+.right-footer {
+    position: relative;
+    left: 150px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="glow" id="glow"></div>
+
+<main>
+
+    <h2>Hello, I'm</h2>
+    <h1>John Yennelo Cablas</h1>
+    <h3 style="font-style: italic;">Jr. Web Developer</h3>
+
+<p class="lead">I build compact, fast, and modern web interfaces. Focused on clarity, performance, and clean UX. Open for freelance & remote work.</p>
+
+<section>
+  <div class="label">STACK</div>
+  <div class="stack">
+    <div class="chip">HTML</div>
+    <div class="chip">CSS / Tailwind</div>
+    <div class="chip">Linux</div>
+    <div class="chip">JavaScript</div>
+    <div class="chip">Responsive UI</div>
+    <div class="chip">GitHub Pages</div>
+  </div>
+</section>
+
+<section>
+  <div class="label">SELECTED WORK</div>
+  <div class="projects">
+    <div class="card"><h3>Minimal Portfolio</h3><p>Single‑page futuristic layout with zero bloat.</p></div>
+    <div class="card"><h3>Business Landing Page</h3><p>Modern responsive site optimized for conversions.</p></div>
+    <div class="card"><h3>Interactive Form UI</h3><p>Client‑side validation, auto‑calculation, clean UX.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="label">MESSAGE ME</div>
+
+  <form class="message-box" action="https://formspree.io/f/xzddbnoe" method="POST" id="contactForm">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Write your message…" required></textarea>
+
+    <div class="message-actions">
+      <button type="submit" class="rocket-btn" aria-label="Send message">
+        SEND
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M5 19l14-7L5 5v5l10 2-10 2v5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </form>
+</section>
+
+<div class="confirmation-bubble" id="confirmationBubble">Message sent successfully!</div>
+<div class="error-bubble" id="errorBubble">Please try again.</div>
+
+<footer>
+    <div class="left-footer">
+        <a href="https://www.facebook.com/jyennelo" target="_blank">Facebook</a>
+        <a href="https://github.com/jyennelo" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/jyennelo" target="_blank">LinkedIn</a>
+    </div>
+
+    <div class="right-footer">
+        <a href="assets/jybcresume.pdf" download>Download my Resume</a>
+    </div>
+
+</footer>
+
+<script>
+// Cursor glow follow
+const glow = document.getElementById('glow');
+window.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+
+// Dark mode toggle switch logic
+const darkSwitch = document.getElementById("darkModeSwitch");
+darkSwitch.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
+});
+
+// Formspree submission + confirmation bubble + error bubble + rocket launch
+const form = document.getElementById("contactForm");
+const bubble = document.getElementById("confirmationBubble");
+const ebubble = document.getElementById("errorBubble");
+const rocketBtn = form.querySelector(".rocket-btn");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  rocketBtn.classList.add("rocket-launch");
+
+  const data = new FormData(form);
+  const response = await fetch(form.action, {
+    method: form.method,
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  });
+
+  if(response.ok){
+    bubble.classList.add("show");
+    form.reset();
+    setTimeout(() => bubble.classList.remove("show"), 5000);
+  } else {
+    ebubble.classList.add("show");
+    form.reset();
+    setTimeout(() => bubble.classList.remove("show"), 500);
+  }
+
+  setTimeout(() => rocketBtn.classList.remove("rocket-launch"), 600);
+});
+</script>
+
+</body>
+</html>
