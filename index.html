@@ -301,7 +301,7 @@ body.light-mode .dark-mode-switch::before {
 }
 
 .right-footer {
-    position: relative;
+    left: 180px;
     /* Removed the hard left: 150px to make it responsive */
 }
 
@@ -317,6 +317,8 @@ body.light-mode .dark-mode-switch::before {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    display: flex;
+    flex-wrap: wrap;
   }
   .dark-mode-switch {
     top: 15px;
@@ -345,6 +347,22 @@ body.light-mode .dark-mode-switch::before {
     max-width: 80%;
   }
 }
+
+.pdf-link svg {
+  width: 40px;
+  height: 40px;
+}
+
+.pdf-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fg);
+}
+
+.pdf-link:hover {
+  color: var(--accent);
+}
+
 
 </style>
 </head>
@@ -408,10 +426,14 @@ body.light-mode .dark-mode-switch::before {
         <a href="https://www.facebook.com/jyennelo" target="_blank">Facebook</a>
         <a href="https://github.com/jyennelo" target="_blank">GitHub</a>
         <a href="https://linkedin.com/in/jyennelo" target="_blank">LinkedIn</a>
-    </div>
+        <a href="assets/jybcresume.pdf" download class="pdf-link" aria-label="Download Resume (PDF)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-width="2"/>
+            <path d="M14 2v6h6" stroke-width="2"/>
+            <text x="7" y="17" font-size="6" fill="currentColor">PDF</text>
+          </svg>
+        </a>
 
-    <div class="right-footer">
-        <a href="assets/jybcresume.pdf" download>Download my Resume</a>
     </div>
 
 </footer>
